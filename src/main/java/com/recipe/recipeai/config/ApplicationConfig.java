@@ -1,4 +1,4 @@
-package com.recipe.recipeai;
+package com.recipe.recipeai.config;
 
 import com.azure.ai.openai.OpenAIClient;
 import com.azure.ai.openai.OpenAIClientBuilder;
