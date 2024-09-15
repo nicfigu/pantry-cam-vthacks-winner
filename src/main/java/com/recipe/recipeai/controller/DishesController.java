@@ -21,18 +21,20 @@ public class DishesController extends BaseController {
     @PostMapping("/generate")
     public ResponseEntity<String> generateDishesList(@RequestBody @Valid RecipeDetailsDto details){
         // The base prompt for sending to model
-        StringBuilder stringBuilder = new StringBuilder().append(String.format("I have the following ingredients: %s.\n", details.ingredientsToString()));
+        StringBuilder stringBuilder = new StringBuilder().append(String.format("I have the following ingredients: %s. ", details.ingredientsToString()));
         if (details.dietRestrictions() != null && !details.dietRestrictions().isEmpty())
-            stringBuilder.append(String.format("My dietary restrictions are: %s.\n", details.dietRestrictionsToString()));
+            stringBuilder.append(String.format("My dietary restrictions are: %s. ", details.dietRestrictionsToString()));
         if (details.preferences() != null && !details.preferences().isEmpty())
-            stringBuilder.append(String.format("My preferences include: %s.\n", details.preferencesToString()));
+            stringBuilder.append(String.format("My preferences include: %s. ", details.preferencesToString()));
         if (details.spices() != null && !details.spices().isEmpty())
-            stringBuilder.append(String.format("I would like to use these spices: %s.\n", details.spicesToString()));
+            stringBuilder.append(String.format("I would like to use these spices: %s. ", details.spicesToString()));
 
-        String prompt = stringBuilder.append(""" 
-                Please give me a few dish names (no more than 3-4) that align with my restrictions and preferences
-                while making use of the ingredients and spices I have (if the restrictions, preferences or spices not mentioned, use the ingredients only).
-                Return the response in the form of string array.""").toString();
+        stringBuilder.append("Please give me 3-4 dish names with these ingredients. ");
+        if (details.dietRestrictions() != null || details.preferences() != null)
+            stringBuilder.append("These dishes should align with my restrictions and/or preferences. ");
+        if (details.spices() != null)
+            stringBuilder.append("I would like to use these spices. ");
+        String prompt = stringBuilder.append("Return the response in the form of string array.").toString();
 
         ChatCompletionsOptions options = getChatCompletionsOptions(prompt);
         // Call Azure OpenAI to get response
@@ -40,4 +42,5 @@ public class DishesController extends BaseController {
         // Fetch the text content
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(completions.getChoices().getFirst().getMessage().getContent().strip());
     }
+
 }
