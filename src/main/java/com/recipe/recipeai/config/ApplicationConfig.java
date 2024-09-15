@@ -19,5 +19,4 @@ public class ApplicationConfig {
     public OpenAIClient openAIClient() {
         return new OpenAIClientBuilder().endpoint(apiEndpoint).httpLogOptions(new HttpLogOptions()).credential(new AzureKeyCredential(apiKey)).buildClient();
     }
-
 }

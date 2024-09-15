@@ -2,6 +2,7 @@ package com.recipe.recipeai.controller;
 
 import com.azure.ai.openai.OpenAIClient;
 import com.azure.ai.openai.models.*;
+import com.azure.core.http.rest.RequestOptions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.recipe.recipeai.dto.RecipeDetailsDto;
 import com.recipe.recipeai.dto.RecipeDishDetailsDto;
@@ -54,17 +55,19 @@ public class RecipesController extends BaseController {
     @CrossOrigin("http://localhost:3000")
     public ResponseEntity<String> generateRecipes(@RequestBody @Valid RecipeDetailsDto details){
         // building prompt for sending to model
-        StringBuilder stringBuilder = new StringBuilder().append(String.format("I have the following ingredients: %s. ", details.ingredientsToString()));
+        StringBuilder stringBuilder = new StringBuilder().append(String.format("Ingredients: %s. ", details.ingredientsToString()));
         if (details.dietRestrictions() != null && !details.dietRestrictions().isEmpty())
-            stringBuilder.append(String.format("My dietary restrictions are: %s. ", details.dietRestrictionsToString()));
+            stringBuilder.append(String.format("Dietary restrictions: %s. ", details.dietRestrictionsToString()));
         if (details.preferences() != null && !details.preferences().isEmpty())
-            stringBuilder.append(String.format("My preferences include: %s. ", details.preferencesToString()));
+            stringBuilder.append(String.format("Preferences: %s. ", details.preferencesToString()));
         if (details.spices() != null && !details.spices().isEmpty())
-            stringBuilder.append(String.format("I would like to use these spices: %s. ", details.spicesToString()));
-        String prompt = stringBuilder.append("Give me a few healthy dish names, their recipes (no more than 2-4)" +
-                "which use these ingredients and align with my restrictions/preferences with the spices, if any. " +
-                "The response format is JSON array:" +
-                "[{\"name\": \"The dish name\", \"content\": \"the recipe for the dish (should include the calories amount, protein, fats, carbs per serving in this field)\"}]").toString();
+            stringBuilder.append(String.format("Spices: %s. ", details.spicesToString()));
+        String prompt = stringBuilder.append(
+                """
+                Provide a valid JSON response of format: [{"name": "The dish name", "content": "the recipe text
+                (include the calories, protein, fats, carbs per serving)"}]. Give 2-4 dish names and their recipes
+                (using these ingredients, spices and aligning with restrictions/preferences).""").toString();
+
         ChatCompletionsOptions options = getChatCompletionsOptions(prompt);
 
         // Call Azure OpenAI to get response
