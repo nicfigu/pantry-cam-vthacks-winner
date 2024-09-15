@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <!--<link rel="shortcut icon" href="/assets/favicon.ico">-->
+    <link rel="stylesheet" href="./style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <script src="https://cdn.roboflow.com/0.2.25/roboflow.js"></script>
+
+    <script>
+      var publishable_key = "rf_85Q3CqevavPYXiP30d5P8AYth6e2";
+
+      const CONFIDENCE_THRESHOLD = 0.1;
+      const MODEL_NAME = "ingredient-detector-fc7de";
+      const MODEL_VERSION = 1;
+    </script>
+
+    <style>
+      .item-btn {
+        margin-left: 5%;
+      }
+      .pgTitle {
+        font-size: 19px;
+        font-style: italic;
+        padding: 5px;
+      }
+      .ingList {
+        padding: 4px;
+        flex-direction: column;
+        color: white;
+        background-color: transparent;
+      }
+      .pictures {
+        position: fixed;
+        bottom: 35%;
+        margin: 15px;
+        flex-direction: row;
+        background: transparent;
+        min-width: 19rem;
+        flex-shrink: 1;
+        flex-wrap: nowrap;
+        text-wrap: nowrap;
+      }
+      .bar {
+        position: absolute;
+        bottom: 30%;
+        text-align: center;
+        color: white;
+        flex-wrap: nowrap;
+        text-wrap: nowrap;
+        .ingIn {
+          height: 45px;
+          font-size: 16px;
+          font-style: italic;
+          min-width: 19rem;
+          background: transparent;
+          color: white;
+        }
+        .btn {
+          height: 45px;
+          width: 45px;
+        }
+      }
+
+      .ingredietns {
+        width: 100%;
+        max-height: 60%; /* Allow space for 3 entries before scrolling */
+        overflow-y: auto; /* Enable vertical scrolling */
+      }
+
+      .ing {
+        padding: 6px;
+        border-radius: 3px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+        height: 45px; /* Set a fixed height for each ingredient entry */
+      }
+    </style>
+  </head>
+
+  <body onload="load()">
+    <div class="ingList">
+      <div class="pictures">
+        <input type="file" accept="image/*" onchange="loadImage(event)" />
+        <button class="btn" type="button" onclick="clearI()">Clear</button>
+      </div>
+      <div class="bar">
+        <input
+          type="text"
+          class="ingIn"
+          placeholder="    Add Ingredient"
+          id="task"
+          required
+          autocomplete="off"
+        />
+        <button class="btn" type="button" onclick="saveI()">&#10010;</button>
+      </div>
+      <div class="ingredietns"></div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="./foodlist.js"></script>
+    <script src="./bar.js"></script>
+  </body>
+</html>
