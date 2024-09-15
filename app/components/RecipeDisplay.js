@@ -1,33 +1,53 @@
 import React, { useState } from "react";
 
-const RecipeDisplay = ({ response }) => {
-  // State to keep track of the recipe whose content is being shown
-  const [openRecipe, setOpenRecipe] = useState(null);
+const Modal = ({ isOpen, onClose, children }) => {
+  if (!isOpen) return null;
 
-  // Function to toggle recipe content
-  const handleClick = (index) => {
-    if (openRecipe === index) {
-      // If the clicked recipe is already open, close it
-      setOpenRecipe(null);
-    } else {
-      // Otherwise, set the clicked recipe as open
-      setOpenRecipe(index);
-    }
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+      <div className="bg-white p-6 rounded-lg max-w-md w-full">
+        {children}
+        <button
+          className="mt-4 bg-[#861F41] text-white px-4 py-2 rounded hover:bg-[#6e1a36]"
+          onClick={onClose}
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  );
+};
+
+const RecipeDisplay = ({ response }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedRecipe, setSelectedRecipe] = useState(null);
+
+  const handleClick = (recipe) => {
+    setSelectedRecipe(recipe);
+    setIsOpen(true);
   };
 
   return (
-    <div className="grid grid-cols-2 gap-4 bg-[#3b3b3b]">
-      {response.map((recipe, index) => (
-        <div
-          key={index}
-          className="border p-4 cursor-pointer bg-[#861F41]"
-          onClick={() => handleClick(index)}
-        >
-          <h2 className="font-bold text-lg">{recipe.name}</h2>
-          {openRecipe === index && <p className="mt-2">{recipe.content}</p>}
-        </div>
-      ))}
-    </div>
+    <>
+      <div className="grid grid-rows-3 gap-4 bg-[#3b3b3b]">
+        {response.map((recipe, index) => (
+          <div
+            key={index}
+            className="border p-4 cursor-pointer bg-[#861F41] text-white"
+            onClick={() => handleClick(recipe)}
+          >
+            <h2 className="font-bold text-lg">{recipe.name}</h2>
+          </div>
+        ))}
+      </div>
+
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+        <h2 className="text-xl font-bold mb-2">{selectedRecipe?.name}</h2>
+        <p className="whitespace-break-spaces text-black">
+          {selectedRecipe?.content}
+        </p>
+      </Modal>
+    </>
   );
 };
 
