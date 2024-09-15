@@ -106,7 +106,7 @@ function SpicesPage() {
   );
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 bg-[#3b3b3b]">
       <h1 className="text-3xl font-bold mb-6">Select Your Preferences</h1>
 
       {renderSection("Spices", spicesList, selectedSpices, setSelectedSpices)}

@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 function IngredientsPage() {
   const [hasItems, setHasItems] = useState(false);
@@ -7,6 +8,7 @@ function IngredientsPage() {
   var spices = [];
   var diet = [];
   var preferences = [];
+  const router = useRouter();
   useEffect(() => {
     // Load ingredients from localStorage when the component mounts
     const loadIngredients = () => {
@@ -62,6 +64,14 @@ function IngredientsPage() {
             machine learning
           </span>{" "}
           do the rest.
+        </div>
+        <div
+          className="h-[10%] w-[80%] mx-auto bg-gradient-to-r from-[#E5751F] to-[#a52852] absolute bottom-8 left-8 text-center font-bold rounded-2xl "
+          onClick={() => {
+            router.push("/recipes");
+          }}
+        >
+          <div className="mt-7 text-xl">Generate Recipes</div>
         </div>
       </div>
     </div>
