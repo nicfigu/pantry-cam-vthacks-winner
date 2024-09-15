@@ -1,6 +1,6 @@
+"use client";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-
+import { useRouter } from "next/navigation";
 const spicesList = [
   "Black Pepper",
   "Cardamom",
@@ -58,7 +58,7 @@ function SpicesPage() {
   const [selectedSpices, setSelectedSpices] = useState([]);
   const [selectedDiets, setSelectedDiets] = useState([]);
   const [selectedHealth, setSelectedHealth] = useState([]);
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const toggleSelection = (item, list, setList) => {
     setList((prevList) =>
@@ -76,8 +76,6 @@ function SpicesPage() {
     localStorage.setItem("spices_string", JSON.stringify(selectedSpices));
     localStorage.setItem("diets_string", JSON.stringify(selectedDiets));
     localStorage.setItem("health_string", JSON.stringify(selectedHealth));
-    navigate("/ingredients");
-    document.getElementById("header").scrollIntoView();
   };
 
   const renderSection = (title, items, selected, setSelected) => (
@@ -116,7 +114,10 @@ function SpicesPage() {
       {renderSection("Health", healthList, selectedHealth, setSelectedHealth)}
 
       <button
-        onClick={handleContinue}
+        onClick={() => {
+          handleContinue();
+          router.push("/ingredients");
+        }}
         className="mt-8 px-6 py-3 bg-green-500 text-white rounded text-lg font-semibold"
       >
         Continue
