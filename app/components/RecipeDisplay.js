@@ -29,11 +29,11 @@ const RecipeDisplay = ({ response }) => {
 
   return (
     <>
-      <div className="grid grid-rows-3 gap-4 bg-[#3b3b3b]">
+      <div className="grid grid-rows-3 gap-4 bg-[#3b3b3b] pt-10 min-h-screen">
         {response.map((recipe, index) => (
           <div
             key={index}
-            className="border p-4 cursor-pointer bg-[#861F41] text-white"
+            className="border p-4 cursor-pointer bg-[#861F41] text-white rounded-xl "
             onClick={() => handleClick(recipe)}
           >
             <h2 className="font-bold text-lg">{recipe.name}</h2>
@@ -42,7 +42,9 @@ const RecipeDisplay = ({ response }) => {
       </div>
 
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <h2 className="text-xl font-bold mb-2">{selectedRecipe?.name}</h2>
+        <h2 className="text-xl font-bold mb-2 text-black">
+          {selectedRecipe?.name}
+        </h2>
         <p className="whitespace-break-spaces text-black">
           {selectedRecipe?.content}
         </p>
