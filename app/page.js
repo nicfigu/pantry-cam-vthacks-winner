@@ -16,7 +16,7 @@ function AppContent() {
 
   return (
     <div className="flex flex-col min-h-screen w-full max-w-full">
-      {location.pathname !== "/ingredients" && <Header />}
+      <Header />
       <main className="flex-grow w-full">
         <Routes>
           <Route path="/" element={<SpicesPage />} />

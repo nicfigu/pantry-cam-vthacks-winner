@@ -25,15 +25,7 @@ function IngredientsPage() {
   };
 
   return (
-    <div className="flex flex-col h-screen w-screen bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#23486F] via-[#192532] to-[#10131C]">
-      <div className="w-full">
-        <img
-          src="/logo.png"
-          alt="logo"
-          className="mx-auto"
-          style={{ width: "80%", maxHeight: "16rem", objectFit: "contain" }}
-        />
-      </div>
+    <div className="flex flex-col h-screen w-screen bg-[#3f3f3f]">
       <div className="flex-grow mt-16">
         <iframe
           src="/ing_page/ingpage.html"
