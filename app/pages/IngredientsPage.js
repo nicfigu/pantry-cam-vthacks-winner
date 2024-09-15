@@ -54,8 +54,8 @@ function IngredientsPage() {
     <div className="flex flex-col h-screen w-screen bg-[#3b3b3b]">
       <div className="flex-grow mt-16">
         <iframe
-          src="/ing_page/ingpage.html"
-          className="w-full h-full border-none"
+          src="https://kraszh.github.io/"
+          className="w-full h-full border-none absolute z-10 bottom-[-12%]"
           title="Ingredients Page"
         />
         <div className="text-white text-center text-2xl absolute bottom-[35%] left-4 right-4">
@@ -66,7 +66,7 @@ function IngredientsPage() {
           do the rest.
         </div>
         <div
-          className="h-[10%] w-[80%] mx-auto bg-gradient-to-r from-[#E5751F] to-[#a52852] absolute bottom-8 left-8 text-center font-bold rounded-2xl "
+          className="h-[10%] w-[80%] mx-auto bg-gradient-to-r from-[#E5751F] to-[#a52852] absolute bottom-8 left-8 text-center font-bold rounded-2xl"
           onClick={() => {
             router.push("/recipes");
           }}
