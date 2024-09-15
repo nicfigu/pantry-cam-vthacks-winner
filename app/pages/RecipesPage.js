@@ -39,6 +39,36 @@ const RecipesPage = () => {
           console.error("Received data is not an array:", data);
           throw new Error("Received data is not in the expected format");
         }
+        var recipeNames = data.map((response) => response.name);
+        console.log(recipeNames);
+        fetch(
+          "http://recipe-ai-1726371321357.azurewebsites.net/api/v1/recipes/images",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(recipeNames),
+          }
+        )
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(
+                "Network response was not ok " + response.statusText
+              );
+            }
+            return response.json();
+          })
+          .then((data) => {
+            console.log(data.map((image) => image.url));
+            setRecipeImages(data.map((image) => image.url));
+          })
+          .catch((error) => {
+            console.error(
+              "There has been a problem with your fetch operation:",
+              error
+            );
+          });
       })
       .catch((error) => {
         console.error(
@@ -66,7 +96,15 @@ const RecipesPage = () => {
 
   if (!isLoaded) return <RecipesLoading />;
   if (error) return <RecipeError />;
-  return <RecipeDisplay response={response} />;
+  return (
+    <>
+      {response && response.length ? (
+        <RecipeDisplay response={response} />
+      ) : (
+        <RecipeError />
+      )}
+    </>
+  );
 };
 
 export default RecipesPage;

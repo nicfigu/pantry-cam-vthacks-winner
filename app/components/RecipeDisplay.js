@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const Modal = ({ isOpen, onClose, children }) => {
   if (!isOpen) return null;
@@ -21,6 +21,7 @@ const Modal = ({ isOpen, onClose, children }) => {
 const RecipeDisplay = ({ response }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
+  const [recipeImages, setRecipeImages] = useState(null);
 
   const handleClick = (recipe) => {
     setSelectedRecipe(recipe);
@@ -29,13 +30,32 @@ const RecipeDisplay = ({ response }) => {
 
   return (
     <>
-      <div className="grid grid-rows-3 gap-4 bg-[#3b3b3b] pt-10 min-h-screen">
+      <div className="grid grid-rows-3 gap-4 bg-[#434343] pt-10 min-h-screen">
         {response.map((recipe, index) => (
           <div
             key={index}
             className="border p-4 cursor-pointer bg-[#861F41] text-white rounded-xl"
             onClick={() => handleClick(recipe)}
           >
+            {recipeImages ? (
+              recipeImages[index] ? (
+                <img src={recipeImages[index]} alt={recipe.name} />
+              ) : (
+                <img
+                  src={
+                    "https://www.destenaire.com/noaccess/wp-content/uploads/2014/10/8-Oddest-Food-Items-Featured-Image1.png"
+                  }
+                  alt={recipe.name}
+                />
+              )
+            ) : (
+              <img
+                src={
+                  "https://www.destenaire.com/noaccess/wp-content/uploads/2014/10/8-Oddest-Food-Items-Featured-Image1.png"
+                }
+                alt={recipe.name}
+              />
+            )}
             <h2 className="font-bold text-lg">{recipe.name}</h2>
           </div>
         ))}
