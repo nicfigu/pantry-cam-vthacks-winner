@@ -33,7 +33,7 @@ const RecipeDisplay = ({ response }) => {
         {response.map((recipe, index) => (
           <div
             key={index}
-            className="border p-4 cursor-pointer bg-[#861F41] text-white rounded-xl "
+            className="border p-4 cursor-pointer bg-[#861F41] text-white rounded-xl"
             onClick={() => handleClick(recipe)}
           >
             <h2 className="font-bold text-lg">{recipe.name}</h2>
@@ -42,7 +42,7 @@ const RecipeDisplay = ({ response }) => {
       </div>
 
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <h2 className="text-xl font-bold mb-2 text-black">
+        <h2 className="text-xl font-bold mb-2 text-black max-h-screen overflow-auto">
           {selectedRecipe?.name}
         </h2>
         <p className="whitespace-break-spaces text-black">
