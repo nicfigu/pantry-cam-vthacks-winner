@@ -6,9 +6,9 @@ function IngredientsList() {
   useEffect(() => {
     // Load ingredients from local storage when the component mounts
     const storedIngredients =
-      JSON.parse(localStorage.getItem("ing_string")) || [];
+      JSON.parse(localStorage.getItem("ings_string")) || [];
     setIngredients(storedIngredients);
-  }, [localStorage.getItem("ing_string")]);
+  }, [localStorage.getItem("ings_string")]);
 
   return (
     <div className="ingredients-list">

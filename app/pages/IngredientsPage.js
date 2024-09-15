@@ -1,12 +1,26 @@
 import React, { useState, useEffect } from "react";
+import * as emoji from "node-emoji";
 
 function IngredientsPage() {
   const [hasItems, setHasItems] = useState(false);
-
+  const [ingredients, setIngredients] = useState([]);
+  var spices = [];
+  var diet = [];
+  var preferences = [];
   useEffect(() => {
-    // Check if there are items in localStorage when the component mounts
-    const items = JSON.parse(localStorage.getItem("ings_string")) || [];
-    setHasItems(items.length > 0);
+    // Load ingredients from localStorage when the component mounts
+    const loadIngredients = () => {
+      const storedIngredients =
+        JSON.parse(localStorage.getItem("ings_string")) || [];
+      spices = JSON.parse(localStorage.getItem("spices_string")) || [];
+      diet = JSON.parse(localStorage.getItem("diets_string")) || [];
+      preferences = JSON.parse(localStorage.getItem("health_string")) || [];
+      setIngredients(storedIngredients);
+      console.log(storedIngredients);
+      setHasItems(storedIngredients.length > 0);
+    };
+
+    loadIngredients();
 
     // Add event listener for storage changes
     window.addEventListener("storage", handleStorageChange);
@@ -17,15 +31,25 @@ function IngredientsPage() {
     };
   }, []);
 
+  const loadIngredients = () => {
+    const storedIngredients =
+      JSON.parse(localStorage.getItem("ings_string")) || [];
+    setIngredients(storedIngredients);
+    setHasItems(storedIngredients.length > 0);
+  };
+
   const handleStorageChange = (e) => {
     if (e.key === "ings_string") {
-      const items = JSON.parse(e.newValue) || [];
-      setHasItems(items.length > 0);
+      const newIngredients =
+        JSON.parse(localStorage.getItem("ings_string")) || [];
+      console.log("new: ", newIngredients);
+      setIngredients(newIngredients);
+      setHasItems(newIngredients.length > 0);
     }
   };
 
   return (
-    <div className="flex flex-col h-screen w-screen bg-[#3f3f3f]">
+    <div className="flex flex-col h-screen w-screen bg-[#3b3b3b]">
       <div className="flex-grow mt-16">
         <iframe
           src="/ing_page/ingpage.html"
