@@ -1,98 +1,53 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import CameraMLComponent from "./CameraMLComponent";
 
 function IngredientsPage() {
-  const [ingredients, setIngredients] = useState([]);
-  const [inputValue, setInputValue] = useState("");
-  const navigate = useNavigate();
+  const [hasItems, setHasItems] = useState(false);
 
   useEffect(() => {
-    const savedIngredients = JSON.parse(
-      localStorage.getItem("ings_string") || "[]"
-    );
-    setIngredients(savedIngredients);
+    // Check if there are items in localStorage when the component mounts
+    const items = JSON.parse(localStorage.getItem("ings_string")) || [];
+    setHasItems(items.length > 0);
+
+    // Add event listener for storage changes
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      // Remove event listener when component unmounts
+      window.removeEventListener("storage", handleStorageChange);
+    };
   }, []);
 
-  const handleAddIngredient = () => {
-    if (inputValue.trim() !== "") {
-      const newIngredients = inputValue
-        .split(",")
-        .map((i) => i.trim().toUpperCase());
-      setIngredients((prev) => [...new Set([...prev, ...newIngredients])]);
-      setInputValue("");
-      updateLocalStorage([...ingredients, ...newIngredients]);
+  const handleStorageChange = (e) => {
+    if (e.key === "ings_string") {
+      const items = JSON.parse(e.newValue) || [];
+      setHasItems(items.length > 0);
     }
   };
 
-  const handleRemoveIngredient = (ingredient) => {
-    const updatedIngredients = ingredients.filter((i) => i !== ingredient);
-    setIngredients(updatedIngredients);
-    updateLocalStorage(updatedIngredients);
-  };
-
-  const handleDetectedIngredients = (detectedIngredients) => {
-    const newIngredients = [
-      ...new Set([...ingredients, ...detectedIngredients]),
-    ];
-    setIngredients(newIngredients);
-    updateLocalStorage(newIngredients);
-  };
-
-  const updateLocalStorage = (ingredientList) => {
-    localStorage.setItem("ings_string", JSON.stringify(ingredientList));
-  };
-
-  const handleContinue = () => {
-    navigate("/recipes");
-  };
-
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">Add Ingredients</h1>
-
-      <div className="mb-4">
-        <input
-          type="text"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          className="w-full px-3 py-2 border rounded"
-          placeholder="Enter ingredients (comma-separated)"
+    <div className="flex flex-col h-screen w-screen bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#23486F] via-[#192532] to-[#10131C]">
+      <div className="w-full">
+        <img
+          src="/logo.png"
+          alt="logo"
+          className="mx-auto"
+          style={{ width: "80%", maxHeight: "16rem", objectFit: "contain" }}
         />
-        <button
-          onClick={handleAddIngredient}
-          className="mt-2 px-4 py-2 bg-blue-500 text-white rounded"
-        >
-          Add
-        </button>
       </div>
-
-      <CameraMLComponent onDetection={handleDetectedIngredients} />
-
-      <div className="mt-8">
-        <h2 className="text-2xl font-semibold mb-4">Current Ingredients</h2>
-        {ingredients.map((ingredient) => (
-          <div
-            key={ingredient}
-            className="flex items-center justify-between bg-gray-100 p-2 mb-2 rounded"
-          >
-            <span>{ingredient}</span>
-            <button
-              onClick={() => handleRemoveIngredient(ingredient)}
-              className="text-red-500"
-            >
-              Remove
-            </button>
-          </div>
-        ))}
+      <div className="flex-grow mt-16">
+        <iframe
+          src="/ing_page/ingpage.html"
+          className="w-full h-full border-none"
+          title="Ingredients Page"
+        />
+        <div className="text-white text-center text-2xl absolute bottom-[35%] left-4 right-4">
+          Snap a photo of your options! Let{" "}
+          <span className="font-bold bg-gradient-to-r from-[#a52852] to-[#E5751F] inline-block text-transparent bg-clip-text">
+            machine learning
+          </span>{" "}
+          do the rest.
+        </div>
       </div>
-
-      <button
-        onClick={handleContinue}
-        className="mt-8 px-6 py-3 bg-green-500 text-white rounded text-lg font-semibold"
-      >
-        Continue to Recipes
-      </button>
     </div>
   );
 }

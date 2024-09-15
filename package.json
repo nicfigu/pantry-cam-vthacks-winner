@@ -9,11 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tensorflow/tfjs": "^4.21.0",
+    "next": "14.2.11",
     "react": "^18",
     "react-dom": "^18",
-    "next": "14.2.11"
+    "roboflow-js": "^0.2.32"
   },
   "devDependencies": {
+    "eslint": "^9.10.0",
     "postcss": "^8",
     "tailwindcss": "^3.4.1"
   }

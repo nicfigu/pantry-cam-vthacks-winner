@@ -77,6 +77,7 @@ function SpicesPage() {
     localStorage.setItem("diets_string", JSON.stringify(selectedDiets));
     localStorage.setItem("health_string", JSON.stringify(selectedHealth));
     navigate("/ingredients");
+    document.getElementById("header").scrollIntoView();
   };
 
   const renderSection = (title, items, selected, setSelected) => (
@@ -88,7 +89,9 @@ function SpicesPage() {
             key={item}
             onClick={() => toggleSelection(item, selected, setSelected)}
             className={`px-3 py-1 rounded ${
-              selected.includes(item) ? "bg-blue-500 text-white" : "bg-gray-200"
+              selected.includes(item)
+                ? "bg-[#E5751F] text-white"
+                : "bg-gray-200"
             }`}
           >
             {item}
@@ -97,7 +100,7 @@ function SpicesPage() {
       </div>
       <button
         onClick={() => clearSelection(setSelected)}
-        className="mt-2 px-4 py-2 bg-red-500 text-white rounded"
+        className="mt-2 px-4 py-2 bg-[#861F41] text-white rounded"
       >
         Clear {title}
       </button>
