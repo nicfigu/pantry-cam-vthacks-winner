@@ -40,7 +40,7 @@ public class DishesController extends BaseController {
         // Call Azure OpenAI to get response
         ChatCompletions completions = openAIClient.getChatCompletions(modelName, options);
         // Fetch the text content
-        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(completions.getChoices().getFirst().getMessage().getContent().strip());
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(completions.getChoices().get(0).getMessage().getContent().strip());
     }
 
 }
