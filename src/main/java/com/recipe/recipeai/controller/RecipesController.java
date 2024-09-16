@@ -28,6 +28,7 @@ import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping("/api/v1/recipes")
+@CrossOrigin(origins = "*")
 public class RecipesController extends BaseController {
     @Value("${spring.ai.azure.bing.endpoint}")
     private String bingEndpoint;
@@ -37,6 +38,7 @@ public class RecipesController extends BaseController {
         super(openAIClient);
     }
     @PostMapping("/generate")
+    //@CrossOrigin("http://localhost:3000")
     public ResponseEntity<String> generateRecipe(@RequestBody @Valid RecipeDishDetailsDto details){
         // The base prompt for sending to model
         String prompt = String.format("""
@@ -52,7 +54,6 @@ public class RecipesController extends BaseController {
 
 
     @PostMapping("/generateFull")
-    @CrossOrigin("http://localhost:3000")
     public ResponseEntity<String> generateRecipes(@RequestBody @Valid RecipeDetailsDto details){
         // building prompt for sending to model
         StringBuilder stringBuilder = new StringBuilder().append(String.format("Ingredients: %s. ", details.ingredientsToString()));
@@ -89,6 +90,7 @@ public class RecipesController extends BaseController {
     private String searchImage(String query) {
         String url = String.format(bingEndpoint, query.replace(" ", "%20"));
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+            System.out.println(url);
             HttpGet request = new HttpGet(url);
             request.addHeader("Ocp-Apim-Subscription-Key", bingApiKey);
             HttpResponse response = httpClient.execute(request);
@@ -97,6 +99,8 @@ public class RecipesController extends BaseController {
             JSONObject jsonObject = new JSONObject(jsonResponse);
             JSONArray imageResults = jsonObject.getJSONArray("value");
             // Returning the first image result
+            System.out.println(query);
+            System.out.println(imageResults.getJSONObject(0));
             return imageResults.getJSONObject(0).getString("contentUrl");
         } catch (Exception e) {
             e.printStackTrace();

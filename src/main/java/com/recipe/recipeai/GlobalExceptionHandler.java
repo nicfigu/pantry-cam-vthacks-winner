@@ -21,4 +21,5 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         logger.warn("Invalid format of request body");
         return ResponseEntity.badRequest().body(ex.getFieldErrors().get(0).getDefaultMessage());
     }
+
 }
