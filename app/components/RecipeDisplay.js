@@ -21,53 +21,39 @@ const Modal = ({ isOpen, onClose, children }) => {
 const RecipeDisplay = ({ response }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
-  const [recipeImages, setRecipeImages] = useState(null);
-
-  const handleClick = (recipe) => {
+  const [selectedName, setSelectedName] = useState(null);
+  const handleClick = (recipe, name) => {
     setSelectedRecipe(recipe);
+    setSelectedName(name);
     setIsOpen(true);
   };
 
   return (
     <>
       <div className="grid grid-rows-3 gap-4 bg-[#434343] pt-10 min-h-screen">
-        {response.map((recipe, index) => (
+        {response.recipeNames.map((name, index) => (
           <div
             key={index}
             className="border p-4 cursor-pointer bg-[#861F41] text-white rounded-xl"
-            onClick={() => handleClick(recipe)}
+            onClick={() =>
+              handleClick(response.recipes[index], response.recipeNames[index])
+            }
           >
-            {recipeImages ? (
-              recipeImages[index] ? (
-                <img src={recipeImages[index]} alt={recipe.name} />
-              ) : (
-                <img
-                  src={
-                    "https://www.destenaire.com/noaccess/wp-content/uploads/2014/10/8-Oddest-Food-Items-Featured-Image1.png"
-                  }
-                  alt={recipe.name}
-                />
-              )
-            ) : (
-              <img
-                src={
-                  "https://www.destenaire.com/noaccess/wp-content/uploads/2014/10/8-Oddest-Food-Items-Featured-Image1.png"
-                }
-                alt={recipe.name}
-              />
-            )}
-            <h2 className="font-bold text-lg">{recipe.name}</h2>
+            <img
+              src={response.images[index]}
+              //"https://www.destenaire.com/noaccess/wp-content/uploads/2014/10/8-Oddest-Food-Items-Featured-Image1.png"
+              alt={name}
+            />
+            <h2 className="font-bold text-lg">{name}</h2>
           </div>
         ))}
       </div>
 
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <h2 className="text-xl font-bold mb-2 text-black max-h-screen overflow-auto">
-          {selectedRecipe?.name}
+          {selectedName}
         </h2>
-        <p className="whitespace-break-spaces text-black">
-          {selectedRecipe?.content}
-        </p>
+        <p className="whitespace-break-spaces text-black">{selectedRecipe}</p>
       </Modal>
     </>
   );

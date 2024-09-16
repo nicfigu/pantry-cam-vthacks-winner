@@ -5,7 +5,11 @@ import RecipeError from "../components/RecipeError";
 
 const RecipesPage = () => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [response, setResponse] = useState([]);
+  const [response, setResponse] = useState({
+    recipeNames: [],
+    images: [],
+    recipes: [],
+  });
   const [error, setError] = useState(false);
 
   const getRecipes = useCallback((requestBody) => {
@@ -34,7 +38,11 @@ const RecipesPage = () => {
             console.log(`Recipe Name: ${recipe.name}`);
             console.log(`Content: ${recipe.content}`);
           });
-          setResponse(data);
+          setResponse({
+            recipes: data.map((response) => response.content),
+            images: [],
+            recipeNames: data.map((response) => response.name),
+          });
         } else {
           console.error("Received data is not an array:", data);
           throw new Error("Received data is not in the expected format");
@@ -60,8 +68,11 @@ const RecipesPage = () => {
             return response.json();
           })
           .then((data) => {
-            console.log(data.map((image) => image.url));
-            setRecipeImages(data.map((image) => image.url));
+            console.log(data);
+            setResponse((prevState) => ({
+              ...prevState,
+              images: data.map((response) => response.url),
+            }));
           })
           .catch((error) => {
             console.error(
@@ -98,7 +109,7 @@ const RecipesPage = () => {
   if (error) return <RecipeError />;
   return (
     <>
-      {response && response.length ? (
+      {response.recipeNames.length > 0 ? (
         <RecipeDisplay response={response} />
       ) : (
         <RecipeError />
